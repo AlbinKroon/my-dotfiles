@@ -1,0 +1,178 @@
+* Quality of Life
+** Changing yes/no to y/n
+Gotta go fast!
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+** Muting the bell
+As if I ever have sound on
+#+BEGIN_SRC emacs-lisp
+(setq ring-bell-function 'ignore)
+#+END_SRC
+** Remembering hotkeys
+Which key gives you a little window with some possible completions for the command you're trying to excecute
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :config
+    (which-key-mode))
+#+END_SRC
+** Stop auto-saving
+Stop the annoying tilde files
+#+BEGIN_SRC emacs-lisp
+(setq make-backup-file nil)
+(setq auto-save-default nil)
+#+END_SRC
+** Electric brackets
+   Thank god for this
+   #+BEGIN_SRC emacs-lisp
+     (setq electric-pair-pairs '(
+				(?\{ . ?\})
+				(?\( . ?\))
+				(?\[ . ?\])
+				(?\" . ?\")
+				))
+
+     (electric-pair-mode t)
+   #+END_SRC
+* Navigation
+** Bring up recent files
+Here we enable the showing of recent files with the hotkey C-x C-r
+#+BEGIN_SRC emacs-lisp
+  (recentf-mode 1)
+  (setq recentf-max-menu-items 25)
+  (setq recentf-max-saved-items 25)
+  (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+#+END_SRC
+
+** Expanding marks outward
+Useful package to expand mark outward from cursor position, done with C-<
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind ( ("C-<" . er/expand-region)))
+#+END_SRC
+** Delete whitespace with one backspace
+Deleting whitespaces all in one go without have to lose your shit
+#+BEGIN_SRC emacs-lisp
+  (use-package hungry-delete
+    :ensure t
+    :config
+    (global-hungry-delete-mode))
+#+END_SRC
+* Appearance
+We straight pimpin' out here
+** Beacon
+   Lets you find the line you're on very fast by highlighting it for a moment after focusing on the window
+#+BEGIN_SRC emacs-lisp
+  (use-package beacon
+    :ensure t
+    :init
+    (beacon-mode 1))
+#+END_SRC
+** Darkokai theme
+   Dark and colorfull contrasted theme
+#+BEGIN_SRC emacs-lisp
+  (use-package darkokai-theme
+    :ensure t
+    :config (load-theme 'darkokai t))
+#+END_SRC
+** Nyan cat
+   Shows the scroll buffer bar nyan cat and can even play music if you're thinking about killing yourself
+#+BEGIN_SRC emacs-lisp
+  (use-package nyan-mode
+    :ensure t
+    :config
+    (nyan-mode)
+    (nyan-start-animation)
+    (nyan-toggle-wavy-trail))
+#+END_SRC
+** Line highlighting
+   Highlighting the current line to make it easier to see where the cursor is
+#+BEGIN_SRC emacs-lisp
+(global-hl-line-mode t)
+#+END_SRC
+** Prettyfying symbols
+   Turns symbols names into actual symbols
+#+BEGIN_SRC emacs-lisp
+(global-prettify-symbols-mode t)
+#+END_SRC
+** Removing all bars
+   When you're tired of spitting bars
+#+BEGIN_SRC emacs-lisp
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+#+END_SRC
+** Disable start splash
+   It's just in the way
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t)
+  (setq inhibit-startup-message t)
+#+END_SRC
+* Completion
+** Company
+   All hail the completion king
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :init (global-company-mode)
+    :config
+    (setq company-tooltip-align-annotations t
+	  company-tooltip-flip-when-above t
+	  company-idle-delay 0
+	  company-minimum-prefix-length 3)
+    :diminish company-mode)
+
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "M-n") nil)
+    (define-key company-active-map (kbd "M-p") nil)
+    (define-key company-active-map (kbd "C-n") #'company-select-next)
+    (define-key company-active-map (kbd "C-p") #'company-select-previous)
+    (define-key company-active-map (kbd "SPC") #'company-abort))
+#+END_SRC
+* Language specific things
+** Python
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'yas-minor-mode)
+  (add-hook 'python-mode-hook 'flycheck-mode)
+  (use-package python
+    :mode ("\\.py\\'" . python-mode)
+    :interpreter ("python" . python-mode))
+#+END_SRC
+* Snippets
+** Yasnippet
+   #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :ensure t
+       :config
+       (use-package yasnippet-snippets
+	 :ensure t)
+       (yas-reload-all))
+   #+END_SRC
+* Flycheck
+** Flycheck
+   Flycheck :)
+   #+BEGIN_SRC emacs-lisp
+     (use-package flycheck
+       :ensure t)
+   #+END_SRC
+* Git integration
+** Magit
+   #+BEGIN_SRC emacs-lisp
+     (use-package magit
+       :ensure t
+       :config
+       (setq magit-push-always-verify nil)
+       (setq git-commit-summary-max-length 50)
+       :bind
+       ("M-g" . magit-status))
+   #+END_SRC
+* Org
+** Org Bullets
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
+#+END_SRC
