@@ -27,7 +27,9 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (rainbow-mode magit org-bullets-mode org-bullets flycheck yasnippet-snippets yasnippet hungry-delete which-key beacon expand-region company nyan-mode darkokai-theme use-package python))))
+    (lsp-mode dracula-theme rainbow-mode magit org-bullets-mode org-bullets flycheck yasnippet-snippets yasnippet hungry-delete which-key beacon expand-region company nyan-mode darkokai-theme use-package python)))
+ '(show-paren-style (quote mixed))
+ '(show-paren-when-point-inside-paren t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
