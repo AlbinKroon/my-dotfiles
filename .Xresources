@@ -1,0 +1,58 @@
+! urxvt
+URxvt*buffered: true
+URxvt*cursorBlink: true
+URxvt*underlineColor: yellow
+URxvt.font: xft:monospace:size=14
+URxvt*depth: 32
+URxvt*borderless: 1
+URxvt.internalBorder: 3
+URxvt*scrollBar: false
+URxvt*loginShell: true
+URxvt*saveLines: 5000
+URxvt*termName: rxvt-unicode
+
+URxvt.background:	     [75]#282a36
+URxvt.foreground:            #f8f8f2
+URxvt.cursorColor:           #e6e6e6
+URxvt.pointerColorBackground:#bfbfbf
+URxvt.pointerColorForeground:#4d4d4d
+
+!! black dark/light
+*color0:                #000000
+*color8:                #4d4d4d
+
+!! red dark/light
+*color1:                #ff5555
+*color9:                #ff6e67
+
+!! green dark/light
+*color2:                #50fa7b
+*color10:               #5af78e
+
+!! yellow dark/light
+*color3:                #f1fa8c
+*color11:               #f4f99d
+
+!! blue dark/light
+*color4:                #bd93f9
+*color12:               #caa9fa
+
+!! magenta dark/light
+*color5:                #ff79c6
+*color13:               #ff92d0
+
+!! cyan dark/light
+*color6:                #8be9fd
+*color14:               #9aedfe
+
+!! white dark/light
+*color7:                #bfbfbf
+*color15:               #e6e6e6
+
+!! Packages
+URxvt.perl-ext-common: clipboard
+
+!! Keybindings
+URxvt.clipboard.autocopy: true
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
