@@ -60,6 +60,26 @@ Deleting whitespaces all in one go without have to lose your shit
     :config
     (global-hungry-delete-mode))
 #+END_SRC
+** Tree sidebar
+   #+BEGIN_SRC emacs-lisp
+     (use-package dired-sidebar
+       :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+       :ensure t
+       :commands (dired-sidebar-toggle-sidebar)
+       :init
+       (add-hook 'dired-sidebar-mode-hook
+		 (lambda ()
+		   (unless (file-remote-p default-directory)
+		     (auto-revert-mode))))
+       :config
+       (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+       (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+       (setq dired-sidebar-subtree-line-prefix "__")
+       (setq dired-sidebar-theme 'vscode)
+       (setq dired-sidebar-use-term-integration t)
+       (setq dired-sidebar-use-custom-font t))
+   #+END_SRC
 * Appearance
 We straight pimpin' out here
 ** Beacon
@@ -115,6 +135,7 @@ We straight pimpin' out here
    #+BEGIN_SRC emacs-lisp
      (use-package rainbow-mode
        :ensure t
+       :diminish rainbow-mode
        :init
        (rainbow-mode 1))
    #+END_SRC
@@ -152,32 +173,33 @@ We straight pimpin' out here
    All hail the completion king
 #+BEGIN_SRC emacs-lisp
   (use-package company
-    :ensure t
-    :init (setq company-tooltip-align-annotations t
-		company-tooltip-flip-when-above t
-		company-idle-delay nil)
-    :hook (after-init . global-company-mode)
-    :diminish company-mode
-    :bind
-    (:map prog-mode-map
+      :ensure t
+      :init (setq company-tooltip-align-annotations t
+		  company-tooltip-flip-when-above t
+		  company-idle-delay 1)
+      :config (global-company-mode)
+      :diminish company-mode
+      :bind
+      (:map prog-mode-map
 	  ("C-i" . company-indent-or-complete-common)
-	  ("C-M-i" . completion-at-point)))
+	  ("C-M-i" . completion-at-point))
+      :catch (lambda (keyword err)
+	   (message (error-message-string err))))
 
-
-  (with-eval-after-load 'company
-    (define-key company-active-map (kbd "M-n") nil)
-    (define-key company-active-map (kbd "M-p") nil)
-    (define-key company-active-map (kbd "C-n") #'company-select-next)
-    (define-key company-active-map (kbd "C-p") #'company-select-previous)
-    (define-key company-active-map (kbd "SPC") #'company-abort))
+    (with-eval-after-load 'company
+      (define-key company-active-map (kbd "M-n") nil)
+      (define-key company-active-map (kbd "M-p") nil)
+      (define-key company-active-map (kbd "C-n") #'company-select-next)
+      (define-key company-active-map (kbd "C-p") #'company-select-previous)
+      (define-key company-active-map (kbd "SPC") #'company-abort))
 #+END_SRC
 ** LSP
    #+BEGIN_SRC emacs-lisp
-     (use-package lsp-mode)
+	  (use-package lsp-mode)
 
-     (use-package company-lsp
-       :defer)
-     (push 'company-lsp company-backends)
+	  (use-package company-lsp
+	    :defer
+	    :config (push 'company-lsp company-backends))
    #+END_SRC
 ** Ido
    Gotta get completion when navigating files
@@ -187,15 +209,79 @@ We straight pimpin' out here
   (setq ido-everywhere t)
   (ido-mode 1)
 #+END_SRC
+** Meghanada
+   #+BEGIN_SRC emacs-lisp
+     (use-package meghanada
+       :ensure t
+       :diminish meghanada-mode "Mm")
+   #+END_SRC
 * Language specific things
 ** Python
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'python-mode-hook 'yas-minor-mode)
-  (add-hook 'python-mode-hook 'flycheck-mode)
   (use-package python
+    :ensure t
+    :config
+    (use-package company-jedi
+      :ensure t)
     :mode ("\\.py\\'" . python-mode)
-    :interpreter ("python" . python-mode))
+    :interpreter ("python" . python-mode)
+    :hook (python-mode . (lambda () (flycheck-mode) (yas-minor-mode) (jedi-mode) (jedi:setup))))
 #+END_SRC
+** Typescript
+   Here is where all the typescript shit should be
+   #+BEGIN_SRC emacs-lisp
+     (use-package typescript-mode
+       :ensure t
+       :mode ("\\.tsx\\'" . typescript-mode)
+       :hook (typescript-mode . (lambda () (flycheck-mode) (yas-minor-mode))))
+   #+END_SRC
+** Java
+   Java specific things here
+   #+BEGIN_SRC emacs-lisp
+     (use-package java-snippets
+       :ensure t)
+     (use-package eclim
+       :ensure t
+       :config
+       (use-package company-emacs-eclim
+	 :ensure t)
+       :hook (java-mode . (lambda ()
+			    (meghanada-mode t)
+			    (flycheck-mode t)
+			    (yas-minor-mode t)
+			    (eclim-mode t)
+			    (company-emacs-eclim-setup))))
+   #+END_SRC
+** YAML
+   Yaml mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package yaml-mode
+       :ensure t)
+   #+END_SRC
+** Kotlin
+   For android development
+   #+BEGIN_SRC emacs-lisp
+     (use-package kotlin-mode
+       :ensure t
+       :hook (kotlin-mode . (lambda ()
+			      (yas-minor-mode t)
+			      (flycheck-mode t))))
+   #+END_SRC
+** Dart
+   Dart, mostly for flutter
+   #+BEGIN_SRC emacs-lisp
+     (use-package lsp-mode
+       :ensure t)
+
+     (use-package lsp-dart 
+       :ensure t
+       :requires lsp-treemacs
+       :hook (dart-mode . lsp))
+
+     ;; Optional packages
+     (use-package lsp-ui
+       :ensure t)
+   #+END_SRC
 * Snippets
 ** Yasnippet
    #+BEGIN_SRC emacs-lisp

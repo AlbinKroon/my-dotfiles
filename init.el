@@ -27,7 +27,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (lsp-mode dracula-theme rainbow-mode magit org-bullets-mode org-bullets flycheck yasnippet-snippets yasnippet hungry-delete which-key beacon expand-region company nyan-mode darkokai-theme use-package python)))
+    (company-capf lsp-ui lsp-dart dart-mode kotlin-mode yaml-mode meghanada typescript-mode company-emacs-eclim eclim java-snippets typscript-mode virtualenv company-jedi dired-sidebar lsp-mode dracula-theme rainbow-mode magit org-bullets-mode org-bullets flycheck yasnippet-snippets yasnippet hungry-delete which-key beacon expand-region company nyan-mode darkokai-theme use-package python)))
  '(show-paren-style (quote mixed))
  '(show-paren-when-point-inside-paren t))
 (custom-set-faces

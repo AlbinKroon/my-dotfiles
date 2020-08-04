@@ -65,6 +65,9 @@ bindsym $mod+d exec bash "/home/albin/.config/rofi/most_used.sh"
 # lock screen
 bindsym $mod+Shift+x exec bash ~/.config/i3/lock.sh
 
+# take a screenshot
+bindsym Print exec maim ~/Pictures/$(date +%s).png
+
 # start ranger
 bindsym $mod+t exec urxvt -e ranger
 
@@ -205,7 +208,7 @@ exec picom
 exec_always feh --bg-scale $wallpaper_path
 
 # Set keyboard layout
-exec setxkbmap se svorak
+exec setxkbmap se dvorak_a5
 
 # Start polybar
 exec bash ~/.config/polybar/launch.sh -c ~/.config/polybar/config.ini
